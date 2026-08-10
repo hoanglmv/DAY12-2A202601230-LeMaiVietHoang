@@ -76,9 +76,26 @@ class ChatRequest(BaseModel):
 
 
 # ─────────────────────────────────────────────────────────────
-# Health & readiness
+# Root & Health & readiness
 # ─────────────────────────────────────────────────────────────
+@app.get("/")
+def root():
+    """Trang chủ chào mừng service."""
+    return {
+        "message": "Welcome to Day 12 Chat Service",
+        "service": SERVICE_NAME,
+        "version": SERVICE_VERSION,
+        "endpoints": {
+            "healthz": "/healthz",
+            "readyz": "/readyz",
+            "chat": "/chat",
+            "docs": "/docs",
+        },
+    }
+
+
 @app.get("/healthz")
+
 def healthz():
     """Liveness probe — process còn sống không?
 
