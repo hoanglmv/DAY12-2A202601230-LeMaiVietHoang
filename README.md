@@ -1,5 +1,4 @@
-![CI](https://img.shields.io/badge/CI-passing-brightgreen)
-![CI](https://github.com/hoanglmv/K4-DAY12-2A202601230-LeMaiVietHoang/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/hoanglmv/DAY12-2A202601230-LeMaiVietHoang/actions/workflows/ci.yml/badge.svg)
 
 # K4 — Ngày 12: Hạ Tầng Cloud & Deployment (14h00–18h00)
 
