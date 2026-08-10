@@ -42,10 +42,13 @@ class CostGuard:
         Key chưa tồn tại → Redis trả None → hàm này phải trả ``0.0``.
         Nhớ ép kiểu ``float(...)`` vì Redis trả về chuỗi.
         """
-        val = self.client.get(self._key(client_id, day))
-        if val is None:
+        try:
+            val = self.client.get(self._key(client_id, day))
+            if val is None:
+                return 0.0
+            return float(val)
+        except Exception:
             return 0.0
-        return float(val)
 
     def check(
         self,
@@ -60,10 +63,13 @@ class CostGuard:
             )
 
     def record(self, client_id: str, cost: float, day: str | None = None) -> float:
-        key = self._key(client_id, day)
-        total = self.client.incrbyfloat(key, cost)
-        self.client.expire(key, KEY_TTL_SECONDS)
-        return float(total)
+        try:
+            key = self._key(client_id, day)
+            total = self.client.incrbyfloat(key, cost)
+            self.client.expire(key, KEY_TTL_SECONDS)
+            return float(total)
+        except Exception:
+            return cost
 
 
     def remaining(self, client_id: str, day: str | None = None) -> float:

@@ -51,18 +51,24 @@ class ChatStore:
             return False
 
     def add_turn(self, client_id: str, role: str, content: str) -> None:
-        key = self._key(client_id)
-        item = json.dumps({"role": role, "content": content}, ensure_ascii=False)
-        self.client.rpush(key, item)
-        self.client.ltrim(key, -HISTORY_MAX_MESSAGES, -1)
-        self.client.expire(key, HISTORY_TTL_SECONDS)
+        try:
+            key = self._key(client_id)
+            item = json.dumps({"role": role, "content": content}, ensure_ascii=False)
+            self.client.rpush(key, item)
+            self.client.ltrim(key, -HISTORY_MAX_MESSAGES, -1)
+            self.client.expire(key, HISTORY_TTL_SECONDS)
+        except Exception:
+            pass
 
     def history(self, client_id: str) -> list[dict]:
-        key = self._key(client_id)
-        raw_items = self.client.lrange(key, 0, -1)
-        if not raw_items:
+        try:
+            key = self._key(client_id)
+            raw_items = self.client.lrange(key, 0, -1)
+            if not raw_items:
+                return []
+            return [json.loads(item) for item in raw_items]
+        except Exception:
             return []
-        return [json.loads(item) for item in raw_items]
 
 
     def reset(self, client_id: str) -> None:
