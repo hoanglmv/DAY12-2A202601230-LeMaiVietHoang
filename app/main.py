@@ -39,12 +39,10 @@ SERVICE_VERSION = "1.0.0"
 # Tách ra thành hàm để test có thể thay bằng Redis giả qua
 # app.dependency_overrides, và để kết nối Redis chỉ tạo khi thật sự cần.
 # ─────────────────────────────────────────────────────────────
-@lru_cache(maxsize=1)
 def get_store() -> ChatStore:
     return ChatStore(get_redis_client())
 
 
-@lru_cache(maxsize=1)
 def get_bucket() -> TokenBucket:
     settings = get_settings()
     return TokenBucket(
@@ -54,7 +52,6 @@ def get_bucket() -> TokenBucket:
     )
 
 
-@lru_cache(maxsize=1)
 def get_cost_guard() -> CostGuard:
     return CostGuard(get_redis_client(), get_settings().daily_budget_usd)
 
