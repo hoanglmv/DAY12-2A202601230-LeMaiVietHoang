@@ -28,9 +28,10 @@ def get_redis_client(url: str | None = None):
         client = redis.from_url(
             url,
             decode_responses=True,
-            socket_timeout=1.0,
-            socket_connect_timeout=1.0,
+            socket_timeout=0.5,
+            socket_connect_timeout=0.5,
         )
+        client.ping()
         return client
     except Exception:
         import fakeredis
