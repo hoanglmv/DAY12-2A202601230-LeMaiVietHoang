@@ -52,15 +52,6 @@ class ChatStore:
 
     def ping(self) -> bool:
         try:
-            if bool(self.client.ping()):
-                return True
-        except Exception:
-            pass
-
-        try:
-            import fakeredis
-
-            self.client = fakeredis.FakeRedis(decode_responses=True)
             return bool(self.client.ping())
         except Exception:
             return False
